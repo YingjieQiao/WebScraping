@@ -36,4 +36,16 @@ for link in bsObj.findAll('td',{'class':'title'},{'class':'storylink'}):
 The link in the code above is a `tag` object and the `text` attribute and retrieve its text content, deleting the html tags and those parentheses formats. 
 
 
-## 
+## Crawling across the internet
+ 
+ <br />
+ 
+The sample code to crawl across the whole internet in the book is uploaded [here](https://github.com/YingjieQiao/WebScraping/blob/master/keepCrawling_SampleCode.py).
+To crawl on a certain website, only webpages under en.wikipedia.org or ieee.org, for example, modify the regular expression for `href`. An example function is commented at the end of the sample code file above.
+
+## Downloading files
+
+ <br />
+ 
+ Use `urllib.request.urlretrieve` to download files.
+ 
