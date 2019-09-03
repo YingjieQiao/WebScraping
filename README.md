@@ -164,6 +164,21 @@ returns `['This', 'is', 'a', 'cooool', '#dummysmiley', ':', ':-)', ':-P', '<3', 
  ('>', 'SYM'),('-', ':'),('>', 'NN'),('<', 'CD'),('--', ':')]
 ```
 
+Take note that parsing sentence structure using `poa_tag` can sometimes be ambiguous. This sentence can have 2 total different meanings but only one of the two is returned. For example,
+```
+s1 = "I saw a man with a telescope"
 
+pos_tag(nltk.word_tokenize(s1))
+Out[9]: 
+[('I', 'PRP'),
+ ('saw', 'VBD'),
+ ('a', 'DT'),
+ ('man', 'NN'),
+ ('with', 'IN'),
+ ('a', 'DT'),
+ ('telescope', 'NN')]
+ ```
+
+![amb](https://github.com/YingjieQiao/WebScraping/blob/master/amb.jpg)
  
  
