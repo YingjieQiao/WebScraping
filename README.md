@@ -58,3 +58,34 @@ To crawl on a certain website, only webpages under en.wikipedia.org or ieee.org,
  
  The parameter "filename" here is the name of the file on the local drive.
 
+
+ <br />
+   
+ ## Data cleaning
+ 
+ <br />
+   
+ Use regular expressions to remove escape characters and use filtering to remove Unicode characters.
+ `.strip(string.punctuation)` removes any punctuation characters on either side of a word except hyphens because they are bounded by letter characters on either side.
+ 
+ ```
+ def cleanInput(content):
+    content = re.sub('\n+', " ", content)        #replace all new line characters with one single white space
+    content = re.sub('\[[0-9]*\]', "", input)    #remove special symbols and numbers, the / here is to escape special characters
+    content = re.sub(' +', " ", content)         #replace all white space characters with one single white space
+    content = bytes(content, "UTF-8")            #remove all Unicode characters by encoding with UTF-8
+    content = content.decode("ascii", "ignore")
+    cleanedInput = []
+    input = input.split(' ')
+    for item in content:
+        content = content.strip(string.punctuation)   #remove punctuations
+        if len(item) > 1 or (item.lower() == 'a' or item.lower() == 'i'):
+            cleanInput.append(item)
+    return cleanedInput
+```
+  
+Openrefine can be applied for more efficient data cleaning.
+ 
+ 
+## NLTK
+
