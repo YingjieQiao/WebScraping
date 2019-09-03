@@ -136,5 +136,34 @@ print(ngrams)
  
  <br />
    
-NLTK is a powerful NLP library in python.  
+NLTK is a powerful NLP library in python.   
 
+ <br />
+   
+
+`nltk.word_tokennize(text1)` returns a list consists of the words and punctuations.
+
+`>>> s0 = "This is a cooool #dummysmiley: :-) :-P <3 and some arrows < > -> <--"`
+
+`>>>nltk.word_tokenize(s0)`
+
+returns `['This', 'is', 'a', 'cooool', '#dummysmiley', ':', ':-)', ':-P', '<3', 'and', 'some', 'arrows', '<', '>', '->', '<--']`
+
+<br />
+   
+`pos_tag` returns the part of speech of a word.
+```
+>>>from nltk import pos_tag
+
+>>>pos_tag(nltk.word_tokenize(s0))
+
+>>>[('This', 'DT'),('is', 'VBZ'),('a', 'DT'),('cooool', 'JJ'),('#', '#'),
+ ('dummysmiley', 'NN'),(':', ':'),(':', ':'),('-', ':'),
+ (')', ')'),(':', ':'),('-P', 'JJ'),('<', '$'),('3', 'CD'),
+ ('and', 'CC'),('some', 'DT'),('arrows', 'NNS'),('<', 'VBP'),
+ ('>', 'SYM'),('-', ':'),('>', 'NN'),('<', 'CD'),('--', ':')]
+```
+
+
+ 
+ 
