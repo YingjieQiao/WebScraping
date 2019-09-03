@@ -3,9 +3,13 @@ This is my web scraping learning notes.
 
 With reference to "Web Scraping with Python" by Ryan Mitchell  <br /><br /><br />
 
-
+ 
+ <br />
+   
 ## Basic data retrieval
-
+ 
+ <br />
+   
 Sample code from the book, to get urls on a webpage.
 ```
 from urllib.request import urlopen
@@ -43,11 +47,17 @@ Use `for tag in bsObj.findAll('a',{'class':'post-tag'}):` to retrieve the follow
  <br />
    
 ## Crawling across the internet
-
+ 
+ <br />
+   
  
 The sample code to crawl across the whole internet in the book is uploaded [here](https://github.com/YingjieQiao/WebScraping/blob/master/keepCrawling_SampleCode.py).
 To crawl on a certain website, only webpages under en.wikipedia.org or ieee.org, for example, modify the regular expression for `href`. An example function is commented at the end of the sample code file above.
 
+ 
+ <br />
+   
+   
 ## Downloading files
 
  <br />
@@ -65,6 +75,7 @@ To crawl on a certain website, only webpages under en.wikipedia.org or ieee.org,
  
  <br />
    
+ 
  Use regular expressions to remove escape characters and use filtering to remove Unicode characters.
  `.strip(string.punctuation)` removes any punctuation characters on either side of a word except hyphens because they are bounded by letter characters on either side.
  
@@ -79,13 +90,51 @@ To crawl on a certain website, only webpages under en.wikipedia.org or ieee.org,
     input = input.split(' ')
     for item in content:
         content = content.strip(string.punctuation)   #remove punctuations
-        if len(item) > 1 or (item.lower() == 'a' or item.lower() == 'i'):
-            cleanInput.append(item)
+        if len(item) > 1 or (item.lower() == 'a' or item.lower() == 'i'):   #single character words "I" and "a"
+            cleanedInput.append(item)
     return cleanedInput
 ```
+ 
+ <br />
+   
+
+An [n-gram](https://en.wikipedia.org/wiki/N-gram) is a contiguous sequence of n items from a given sample of text or speech.
+ ```
+ def ngrams(text,n):
+    text = cleanInput(text)
+    ngrammed = []
+    for i in range(len(text)-n+1):
+        ngrammed.append(input[i:i+n])
+    return ngrammed
+ ```
+ 
+ <br />
+   
+
+`OrderedDict`, as obvious from its name, is an ordered dictionary.
+
+The `cleanInput` function above obly record the existence of each ngram but not frqeuency. The follwoing code can record the frequency of each ngram along with the ngram itself in an ordered dictionary.
+```
+from collections import OrderedDict
+
+...
+
+ngrams = ngrams(content, 2)
+ngrams = OrderedDict(sorted(ngrams.items(), key=lambda t: t[1], reverse=True))
+print(ngrams)
   
-Openrefine can be applied for more efficient data cleaning.
+
+```
+[Openrefine](http://openrefine.org/) can be applied for more efficient data cleaning. It may be not working on Mac because it has been open sourced which may potentially be regarded as "unsafe" in the eyes of Apple.
  
  
+  
+ <br />
+   
 ## NLTK
+
+ 
+ <br />
+   
+NLTK is a powerful NLP library in python.  
 
