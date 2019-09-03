@@ -151,7 +151,7 @@ returns `['This', 'is', 'a', 'cooool', '#dummysmiley', ':', ':-)', ':-P', '<3', 
 
 <br />
    
-`pos_tag` returns the part of speech of a word.
+`pos_tag` returns a list ot tuples, `(token, the part of speech of a word)`.
 ```
 >>>from nltk import pos_tag
 
