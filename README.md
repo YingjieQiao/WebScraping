@@ -41,7 +41,7 @@ bsObj = BeautifulSoup(html, features="html.parser")
 for link in bsObj.findAll('td',{'class':'title'},{'class':'storylink'}):
     print(link.text)
 ```
-The link in the code above is a `tag` object and the `text` attribute and retrieve its text content, deleting the html tags and those parentheses formats. 
+The link in the code above is a `tag` object and the `.tex`t gets all the child strings and return concatenated using the given separator. Return type of `.tex`t is unicode object.
 
 [Here](https://github.com/YingjieQiao/WebScraping/blob/master/tagCount.py) is another piece of code I've written for practice. Based on the data from the first 2 pages of https://stackoverflow.com/tags?page=1&tab=popular, it produces a graph with languages on the x-axis and number of tags on the y-axis. In my current approach, I used 2 loops, i.e., created 2 BeautifulSoup objects to get 2 arrays.  
    <br />
@@ -221,6 +221,103 @@ print(ngrams)
  
   
  <br />
+ 
+   
+   
+## Avoid Scraping Traps
+ 
+  
+ <br />  
+ 
+The headers can be editted to avoid being blocked by website admin using the code below:
+
+```
+import requests
+from bs4 import BeautifulSoup
+
+session = requests.Session()
+headers = {"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit 537.36 (KHTML, like Gecko) Chrome","Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"}
+
+#this website is useful in checking your http headers
+url = "https://www.whatismybrowser.com/developers/what-http-headers-is-my-browser-sending"  
+req = session.get(url, headers=headers)
+bsObj = BeautifulSoup(req.text)
+print(bsObj.find("table",{"class":"table-striped"}).get_text) 
+```
+   
+The "User-agent" in the header is what really matters when the website checks the "humaness" of each visit.
+  
+Side note: `.text` attribute can give you a better formatting in the output.
+
+  
+ <br />  
+   
+Handling cookies correctly can alleviate many of scraping problems, although cookies
+can also be a double-edged sword. Websites that track your progression through a site
+using cookies might attempt to cut off scrapers that display abnormal behavior, such
+as completing forms too quickly, or visiting too many pages. Although these behaviors
+can be disguised by closing and reopening connections to the site, or even changing
+your IP address.  
+
+Cookies can also be very necessary to scrape a site. Staying
+logged in on a site requires that you be able to hold and present a cookie from page to
+page. Some websites don’t even require that you actually log in and get a new version
+of a cookie every time—merely holding an old copy of a “logged in” cookie and visiting
+the site is enough.  
+
+The following code manipulates cookies using `selenium.webdriver`.
+```
+from selenium import webdriver
+
+driver = webdriver.PhantomJS(executable_path='<Path to Phantom JS>')
+driver.get("http://pythonscraping.com")
+driver.implicitly_wait(1)
+print(driver.get_cookies())
+savedCookies = driver.get_cookies()
+driver2 = webdriver.PhantomJS(executable_path='<Path to Phantom JS>')
+driver2.get("http://pythonscraping.com")
+driver2.delete_all_cookies()
+for cookie in savedCookies:
+driver2.add_cookie(cookie)
+driver2.get("http://pythonscraping.com")
+driver.implicitly_wait(1)
+print(driver2.get_cookies())
+```  
+Technical note: For `driver2`, it must load the website first so that Selenium knows which website
+the cookies belong to, even if the act of loading the website does nothing useful
+for us.  
+
+  
+ <br />  
+   
+“Hidden” fields in html  can prevent scrapers from sending forms. Such as putting a link in the html source code but adding a `display:None` CSS attribute, creating a hidden input blank or moving a clickable element 500000 pixles to the right, i.e. off the monitor screen.  
+
+Whether the element is present on the page can be determined by the `is_displayed()` function.  
+
+```
+from selenium import webdriver
+from selenium.webdriver.remote.webelement import WebElement
+
+driver = webdriver.PhantomJS(executable_path='')
+driver.get("http://pythonscraping.com/pages/itsatrap.html")
+
+links = driver.find_elements_by_tag_name("a")
+for link in links:
+    if not link.is_displayed():
+        print("The link "+link.get_attribute("href")+" is a trap")
+        
+fields = driver.find_elements_by_tag_name("input")
+for field in fields:
+    if not field.is_displayed():
+        print("Do not change value of "+field.get_attribute("name"))
+        
+```  
+
+
+
+
+
+
    
 ## NLTK
 
