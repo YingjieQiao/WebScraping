@@ -54,16 +54,7 @@ Also, I find it easier to locate urls in the html source using the following for
 I applied such formatting in re-writing the downloading files sample code using `urllib.request.urlretrieve` later.
  <br />
    
-## Crawling across the internet
- 
- <br />
-   
- 
-The sample code to crawl across the whole internet in the book is uploaded [here](https://github.com/YingjieQiao/WebScraping/blob/master/keepCrawling_SampleCode.py).
-To crawl on a certain website, only webpages under en.wikipedia.org or ieee.org, for example, modify the regular expression for `href`. An example function is commented at the end of the sample code file above.
 
- 
- <br />
    
    
 ## Downloading files
@@ -160,7 +151,16 @@ Some practices:
 
  <br />  
    
+## Crawling across the internet
+ 
+ <br />
+   
+ 
+The sample code to crawl across the whole internet in the book is uploaded [here](https://github.com/YingjieQiao/WebScraping/blob/master/keepCrawling_SampleCode.py).
+To crawl on a certain website, only webpages under en.wikipedia.org or ieee.org, for example, modify the regular expression for `href`. An example function is commented at the end of the sample code file above.
 
+ 
+ <br />
    
  ## Data cleaning
  
@@ -274,12 +274,15 @@ driver.get("http://pythonscraping.com")
 driver.implicitly_wait(1)
 print(driver.get_cookies())
 savedCookies = driver.get_cookies()
+
 driver2 = webdriver.PhantomJS(executable_path='<Path to Phantom JS>')
 driver2.get("http://pythonscraping.com")
 driver2.delete_all_cookies()
+
 for cookie in savedCookies:
-driver2.add_cookie(cookie)
-driver2.get("http://pythonscraping.com")
+    driver2.add_cookie(cookie)
+    driver2.get("http://pythonscraping.com")
+    
 driver.implicitly_wait(1)
 print(driver2.get_cookies())
 ```  
@@ -312,12 +315,108 @@ for field in fields:
         print("Do not change value of "+field.get_attribute("name"))
         
 ```  
+Although you probably don’t want to visit any hidden links you find, you will want to
+make sure that you submit any pre-populated hidden form values (or have Selenium
+submit them for you) with the rest of the form. To sum up, it is dangerous to simply
+ignore hidden fields, although you must be very careful when interacting with them.
+  
+ <br />  
+   
+
+## Testing
+  
+ <br />  
+   
+About `assert`: https://stackoverflow.com/questions/5142418/what-is-the-use-of-assert-in-python
+
+Python’s unit testing module, `unittest`, comes packaged with all standard Pythoninstallations. Just import and extend `unittest.TestCase`, and it will do the following:  
+
+1. Provide `setUp` and `tearDown` functions that run before and after each unit test
+
+2. Provide several types of “assert” statements to allow tests to pass or fail
+
+3. Run all functions that begin with `test_ ` as unit tests, and ignore functions thatare not prepended as tests.
+
+
+Here is a piece of sample code taken from the book.  
+```
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+import unittest
+
+
+class TestWikipedia(unittest.TestCase):
+    bsObj = None
+    def setUpClass():
+        global bsObj
+        url = "http://en.wikipedia.org/wiki/Monty_Python"
+        bsObj = BeautifulSoup(urlopen(url))
+        
+    def test_titleText(self):
+        global bsObj
+        pageTitle = bsObj.find("h1").get_text()
+        self.assertEqual("Monty Python", pageTitle)
+        
+    def test_contentExists(self):
+        global bsObj
+        content = bsObj.find("div",{"id":"mw-content-text"})
+        self.assertIsNotNone(content)
+```
+
+If needs to do multiple tests, create a function like this:  
+
+```
+class TestWikipedia(unittest.TestCase):
+    bsObj = None
+    url = None
+    def test_PageProperties(self):
+        global bsObj
+        global url
+        url = "http://en.wikipedia.org/wiki/Monty_Python"
+        
+        #Test the first 100 pages we encounter
+        for i in range(1, 100):
+            bsObj = BeautifulSoup(urlopen(url))
+            titles = self.titleMatchesURL()
+            self.assertEquals(titles[0], titles[1])
+            self.assertTrue(self.contentExists())
+            url = self.getNextLink()
+        print("Done!")
+```  
+ 
+ <br />
+   
+`selenuim` can also be apllied for testing especially websites written in JavaScrip.  
+
+Although obviously written in the same language, the syntax of Python unittests and
+Selenium unit tests have surprisingly little in common. Selenium does not require
+that its unit tests be contained as functions within classes; its “assert” statements do
+not require parentheses; and tests pass silently, only producing some kind of message
+on a failure:  
+ 
+```
+driver = webdriver.PhantomJS()
+driver.get("http://en.wikipedia.org/wiki/Monty_Python")
+assert "Monty Python" in driver.title
+driver.close()
+```   
+
+When run, this test should produce no output if the title is correct.  
+
+ 
+ <br />
+   
+`selenuim` is powerful in interacting with site such as filling and submitting forms automatically, completing drag-and-drop bot-verification, taking screenshots, etc.  
 
 
 
 
 
 
+
+  
+ <br />  
+   
    
 ## NLTK
 
