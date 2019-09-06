@@ -417,6 +417,61 @@ When run, this test should produce no output if the title is correct.
  <br />  
    
    
+## Scraping Remotely
+
+  
+ <br />  
+   
+IP address blocking is an extremely common method for server administrators to stop suspected web scrapers from accessing servers.
+So changing the IP address is important in avoid being blocked for web scrapers.
+
+Some tasks are simply too large for a home computer and Internet connection and require a lot more bandwidth and storage
+than your current setup can provide.
+
+The Onion Router network, better known by the acronym [Tor](https://en.wikipedia.org/wiki/Tor_(anonymity_network)), is a network of volunteer
+servers set up to route and reroute traffic through many layers (hence the onion
+reference) of different servers in order to obscure its origin. Data is encrypted before
+it enters the network so that if any particular server is eavesdropped on the nature of
+the communication cannot be revealed.   
+
+[PySocks](https://pypi.org/project/PySocks/1.5.0/) is a remarkably simple Python module that is capable of routing traffic
+through proxy servers and that works fantastically in conjunction with Tor. To download: `pip install PySocks==1.5.0`
+
+The Tor service must be running on **port 9150** (the default port) while running this code:
+```
+import socks
+import socket
+from urllib.request import urlopen
+
+socks.set_default_proxy(socks.SOCKS5, "localhost", 9150)
+socket.socket = socks.socksocket
+print(urlopen('http://icanhazip.com').read())  
+```
+
+The website http://icanhazip.com displays only the IP address for the client connecting
+to the server and can be useful for testing purposes. When this script is run, it
+should display an IP address that is not your own.
+
+If you want to use Selenium and PhantomJS with Tor, you don’t need PySocks at all—
+just make sure that Tor is currently running and add the optional service_args
+parameters, specifying that Selenium should connect through **port 9150**:
+
+```
+from selenium import webdriver
+
+service_args = [ '--proxy=localhost:9150', '--proxy-type=socks5', ]
+driver = webdriver.PhantomJS(executable_path='<path to PhantomJS>',service_args=service_args)
+driver.get("http://icanhazip.com")
+print(driver.page_source)
+driver.close()
+```
+
+Again, this should print out an IP address that is not your own but the one that your running Tor client is currently using.
+
+  
+ <br />  
+   
+
 ## NLTK
 
  
