@@ -4,4 +4,4 @@ Here are some scripts about scraping I've written.
 
 <br />  
   
-Type in the question you want to search and it will automatically downloads all the answers of 100 relavant questions in one txt file.
+Type in the question you want to search on quora and it will automatically downloads all the answers of 100 relavant questions in one txt file. The [testfile.txt](https://github.com/YingjieQiao/WebScraping/blob/master/Practices/testfile.txt) here is generated running this [script](https://github.com/YingjieQiao/WebScraping/blob/master/Practices/quoraScraper.py).
