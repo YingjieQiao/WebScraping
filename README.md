@@ -146,7 +146,6 @@ while not url.endswith('#'):
     url = 'http://xkcd.com' + prevLink.get('href')
 ```
 
-Some practices:
 
 
  <br />  
