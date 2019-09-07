@@ -12,7 +12,9 @@ With reference to "Web Scraping with Python" by Ryan Mitchell, "Automate Boring 
 `webbrowser.open(url, new=0, autoraise=True)` is used to open a website in a browser. `new=0` opens the page in the same browser window if possible, `new=1` opens the page in a new window, `new=2` opens the page in a new tab. 
 
 `webbrowser.open('https://www.google.com/maps/place/' + address)`  
-
+ 
+ <br />
+   
 
 Sample code from the book, to get urls on a webpage.
 ```
@@ -148,7 +150,108 @@ while not url.endswith('#'):
 
 
 
- <br />  
+ <br />   
+   
+## Working with PDF
+
+
+ <br />   
+  
+There are multi 3rd party pdf modules available such as [pdfminer](https://pypi.org/project/pdfminer/), [PyPDF2](https://anaconda.org/conda-forge/pypdf2), etc. I am working with PyPDF2 here.  
+
+```
+import PyPDF2
+
+pdfFileObj = open('core paper copy.pdf', 'rb')
+pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
+pageObj = pdfReader.getPage(0)
+
+print(pdfReader.numPages)
+print(pageObj)
+print(pageObj.extractText())
+```
+
+To extract text from a page, you need to get a `page` object, which represents
+a single page of a PDF, from a `PdfFileReader` object. You can get a `Page`
+object by calling the `getPage()` method on a `PdfFileReader` object and passing
+it the page number of the page you’re interested in — in the given case, 0.  
+
+Once you have your Page object, call its extractText() method to return a
+string of the page’s text. But the text extraction isn't perfect and there are some undesirable formatting errors.
+  
+ <br />
+  
+Some PDF documents have an encryption feature that will keep them from being read until whoever is opening the document provides a password. To decrypt, use the following:
+
+```
+password = "the password of the encryted pdf file, you need to find it out by yourself somehow"
+pdfReader.decrypt(password)
+```
+  
+ <br />
+  
+PyPDF2’s counterpart to `PdfFileReader` objects is `PdfFileWriter` objects, which
+can create new PDF files. But PyPDF2 cannot write arbitrary text to a PDF
+like Python can do with plaintext files. Instead, PyPDF2’s PDF-writing capabilities
+are limited to copying pages from other PDFs, rotating pages, overlaying
+pages, and encrypting files. Also, PyPDF2 doesn’t allow you to directly edit a PDF. Instead, you have to
+create a new PDF and then copy content over from an existing document.
+
+The following is the sample code from the book about how to combine 2 existing pdf files into a new one.
+
+```
+import PyPDF2
+
+pdf1File = open('file1.pdf', 'rb')
+pdf2File = open('file2.pdf', 'rb')
+pdf1Reader = PyPDF2.PdfFileReader(pdf1File)
+pdf2Reader = PyPDF2.PdfFileReader(pdf2File)
+pdfWriter = PyPDF2.PdfFileWriter()
+
+for pageNum in range(pdf1Reader.numPages):
+    pageObj = pdf1Reader.getPage(pageNum)
+    pdfWriter.addPage(pageObj)
+    
+for pageNum in range(pdf2Reader.numPages):
+    pageObj = pdf2Reader.getPage(pageNum)
+    pdfWriter.addPage(pageObj)
+    
+pdfOutputFile = open('combined.pdf', 'wb')
+pdfWriter.write(pdfOutputFile)
+pdfOutputFile.close()
+pdf1File.close()
+pdf2File.close()
+```
+
+
+PyPDF2 can also overlay the contents of one page over another, which is useful for adding a logo, timestamp, or watermark to a page. 
+
+Here is an example of how to add in watermarks using PyPDF2.
+
+```
+import PyPDF2
+
+minutesFile = open('meetingminutes.pdf', 'rb')
+pdfReader = PyPDF2.PdfFileReader(minutesFile)
+minutesFirstPage = pdfReader.getPage(0)
+
+pdfWatermarkReader = PyPDF2.PdfFileReader(open('watermark.pdf', 'rb'))
+minutesFirstPage.mergePage(pdfWatermarkReader.getPage(0))
+
+pdfWriter = PyPDF2.PdfFileWriter()
+pdfWriter.addPage(minutesFirstPage)
+
+for pageNum in range(1, pdfReader.numPages):
+    pageObj = pdfReader.getPage(pageNum)
+    pdfWriter.addPage(pageObj)
+    
+resultPdfFile = open('watermarkedCover.pdf', 'wb')
+pdfWriter.write(resultPdfFile)
+minutesFile.close()
+resultPdfFile.close()
+```
+
+[This script](https://github.com/YingjieQiao/WebScraping/blob/master/mergepdf.py) merges many PDF documents into a single PDF file without the first page of each file (cover by default).
    
 ## Crawling across the internet
  
