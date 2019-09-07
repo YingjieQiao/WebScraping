@@ -32,7 +32,7 @@ The bsObj is the html source code of the original website.
 The links on most webpages exist in this format: <br />
 <a href="https://someurl.com" sometag </a>   <br />
 
-I wrote a piece of code to retrieve title and corresonding url link on [hacker news](https://news.ycombinator.com/) as a practice. [getTitles.py](https://github.com/YingjieQiao/WebScraping/blob/master/getTitles.py)
+I wrote a piece of code to retrieve title and corresonding url link on [hacker news](https://news.ycombinator.com/) as a practice. [getTitles.py](https://github.com/YingjieQiao/WebScraping/blob/master/Practices/getTitles.py)
 ```
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
@@ -45,7 +45,7 @@ for link in bsObj.findAll('td',{'class':'title'},{'class':'storylink'}):
 ```
 The link in the code above is a `tag` object and the `.tex`t gets all the child strings and return concatenated using the given separator. Return type of `.tex`t is unicode object.
 
-[Here](https://github.com/YingjieQiao/WebScraping/blob/master/tagCount.py) is another piece of code I've written for practice. Based on the data from the first 2 pages of https://stackoverflow.com/tags?page=1&tab=popular, it produces a graph with languages on the x-axis and number of tags on the y-axis. In my current approach, I used 2 loops, i.e., created 2 BeautifulSoup objects to get 2 arrays.  
+[Here](https://github.com/YingjieQiao/WebScraping/blob/master/Practices/tagCount.py) is another piece of code I've written for practice. Based on the data from the first 2 pages of https://stackoverflow.com/tags?page=1&tab=popular, it produces a graph with languages on the x-axis and number of tags on the y-axis. In my current approach, I used 2 loops, i.e., created 2 BeautifulSoup objects to get 2 arrays.  
    <br />
 Use `for tag in bsObj.findAll('a',{'class':'post-tag'}):` to retrieve the following html (don't have to create the `bs` object layer by layer):   <br />
 `<a href="/questions/tagged/java" class="post-tag" title="" rel="tag">java</a>`  
