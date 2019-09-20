@@ -1,5 +1,5 @@
 # WebScraping
-This is my web scraping learning notes.
+This is my web scraping learning notes. Preparation work for a UROP project.
 
 With reference to "Web Scraping with Python" by Ryan Mitchell, "Automate Boring Stuff with Python" by Al Sweigart and Coursera course "Using Python to Access Web Data" by Prof. Charles Severance. <br /><br /><br />  
 
@@ -43,7 +43,7 @@ bsObj = BeautifulSoup(html, features="html.parser")
 for link in bsObj.findAll('td',{'class':'title'},{'class':'storylink'}):
     print(link.text)
 ```
-The link in the code above is a `tag` object and the `.tex`t gets all the child strings and return concatenated using the given separator. Return type of `.tex`t is unicode object.
+The link in the code above is a `tag` object and the `.text` gets all the child strings and return concatenated using the given separator. Return type of `.text` is unicode object.
 
 [Here](https://github.com/YingjieQiao/WebScraping/blob/master/Practices/tagCount.py) is another piece of code I've written for practice. Based on the data from the first 2 pages of https://stackoverflow.com/tags?page=1&tab=popular, it produces a graph with languages on the x-axis and number of tags on the y-axis. In my current approach, I used 2 loops, i.e., created 2 BeautifulSoup objects to get 2 arrays.  
    <br />
