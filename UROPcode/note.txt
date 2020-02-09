@@ -1,0 +1,4 @@
+1. Catalyst: for water splitting (to produce H2 for energy)
+2. perovskite soda cell: absorb sunlight and convert them into energy. Pb2+ is toxic. Minimize the toxicity but preserve the energy conversion efficiency. Passivation material
+3. Florent dye: toxicity. Find a dye that is not so toxic to be used for medicals. Make them more photostable. Selectivity: go into cancer cells/ nerve cells/virus/malaria...
+4.  
